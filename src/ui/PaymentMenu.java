@@ -25,12 +25,12 @@ public class PaymentMenu {
         boolean back = false;
         while (!back) {
             System.out.println("\n-- Payment Management --");
-            System.out.println("1. Record subscription payment (Create)");
-            System.out.println("2. List all payments (Read)");
-            System.out.println("3. List payments for a subscription (Read)");
-            System.out.println("4. Calculate remaining balance (Read)");
-            System.out.println("5. Void a payment (Delete)");
-            System.out.println("0. Back");
+            System.out.println("1. Record subscription payment ");
+            System.out.println("2. List all payments ");
+            System.out.println("3. List payments for a subscription ");
+            System.out.println("4. Calculate remaining balance ");
+            System.out.println("5. Void a payment ");
+            System.out.println("6. Back");
             String c = InputHelper.readText(sc, "Choose: ");
             try {
                 switch (c) {
@@ -39,7 +39,7 @@ public class PaymentMenu {
                     case "3": listBySub(); break;
                     case "4": balance(); break;
                     case "5": voidPayment(); break;
-                    case "0": back = true; break;
+                    case "6": back = true; break;
                     default: System.out.println("  ! Invalid option. Choose 0-5.");
                 }
             } catch (Exception e) {

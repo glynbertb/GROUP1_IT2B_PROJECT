@@ -22,23 +22,19 @@ public class DriverMenu {
         boolean back = false;
         while (!back) {
             System.out.println("\n-- Driver Management --");
-            System.out.println("1. Add driver (Create)");
-            System.out.println("2. List all drivers (Read)");
-            System.out.println("3. Search driver by name (Read)");
-            System.out.println("4. View driver by ID (Read)");
-            System.out.println("5. Update driver (Update)");
-            System.out.println("6. Remove driver (Delete)");
-            System.out.println("0. Back");
+            System.out.println("1. Add driver ");
+            System.out.println("2. List all drivers ");
+            System.out.println("3. Update driver ");
+            System.out.println("4. Remove driver ");
+            System.out.println("5. Back");
             String c = InputHelper.readText(sc, "Choose: ");
             try {
                 switch (c) {
                     case "1": create(); break;
                     case "2": list(); break;
-                    case "3": search(); break;
-                    case "4": view(); break;
-                    case "5": update(); break;
-                    case "6": delete(); break;
-                    case "0": back = true; break;
+                    case "3": update(); break;
+                    case "4": delete(); break;
+                    case "5": back = true; break;
                     default: System.out.println("  ! Invalid option. Choose 0-6.");
                 }
             } catch (Exception e) {
@@ -48,9 +44,9 @@ public class DriverMenu {
     }
 
     private void create() throws Exception {
-        String name = InputHelper.readText(sc, "Name (2-60 chars): ", 2, 60, false);
+        String name = InputHelper.readText(sc, "Name : ", 0, 60, false);
         String contact = InputHelper.readContact(sc, "Contact: ", false);
-        String license = InputHelper.readText(sc, "License number (3-30 chars): ", 3, 30, false);
+        String license = InputHelper.readText(sc, "License number : ", 0, 30, false);
         Driver added = driverService.add(name, contact, license);
         System.out.println("Added successfully.");
         printDrivers(java.util.List.of(added));
@@ -60,17 +56,6 @@ public class DriverMenu {
         printDrivers(driverService.all());
     }
 
-    private void search() {
-        String kw = InputHelper.readText(sc, "Search name keyword: ");
-        printDrivers(driverService.searchByName(kw));
-    }
-
-    private void view() {
-        int id = InputHelper.readId(sc, "Driver ID: ");
-        driverService.findById(id).ifPresentOrElse(
-                d -> printDrivers(java.util.List.of(d)),
-                () -> System.out.println("  ! Driver not found (ID " + id + ")."));
-    }
 
     private void printDrivers(List<Driver> list) {
         String[] headers = {"ID", "Name", "Contact", "License", "Status"};

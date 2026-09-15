@@ -22,10 +22,10 @@ public class CustomerMenu {
         boolean back = false;
         while (!back) {
             System.out.println("\n-- Customer Management --");
-            System.out.println("1. Register new customer (Create)");
-            System.out.println("2. List all customers (Read)");
-            System.out.println("3. Update customer (Update)");
-            System.out.println("4. Delete customer (Delete)");
+            System.out.println("1. Register new customer");
+            System.out.println("2. List all customers");
+            System.out.println("3. Update customer");
+            System.out.println("4. Delete customer");
             System.out.println("5. Back");
             String c = InputHelper.readText(sc, "Choose: ");
             try {
@@ -44,8 +44,8 @@ public class CustomerMenu {
     }
 
     private void create() throws Exception {
-        String name = InputHelper.readText(sc, "Name (2-60 chars): ", 2, 60, false);
-        String address = InputHelper.readText(sc, "Address (5-120 chars): ", 5, 120, false);
+        String name = InputHelper.readText(sc, "Name : ", 0, 60, false);
+        String address = InputHelper.readText(sc, "Address : ", 0, 120, false);
         String contact = InputHelper.readContact(sc, "Contact number: ", false);
         String email = InputHelper.readEmail(sc, "Email: ", false);
         Customer cust = customerService.register(name, address, contact, email);
@@ -75,7 +75,7 @@ public class CustomerMenu {
                 .orElseThrow(() -> new Exception("Customer not found (ID " + id + ")."));
         printCustomers(java.util.List.of(existing));
         System.out.println("(Press Enter with no text is NOT allowed here - retype the value.)");
-        String name = InputHelper.readText(sc, "New name [" + existing.getName() + "]: ", 2, 60, false);
+        String name = InputHelper.readText(sc, "New name [" + existing.getName() + "]: ", 0, 60, false);
         String address = InputHelper.readText(sc, "New address [" + existing.getAddress() + "]: ", 0, 120, false);
         String contact = InputHelper.readContact(sc, "New contact [" + existing.getContactNumber() + "]: ", false);
         String email = InputHelper.readEmail(sc, "New email [" + existing.getEmail() + "]: ", false);

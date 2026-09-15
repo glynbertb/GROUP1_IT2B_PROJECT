@@ -89,6 +89,15 @@ public class SubscriptionService {
         s.setTotalAmount(plan.getUnitPrice() * newQuantity);
     }
 
+    public void changePlan(int subscriptionId, int newPlanId) throws Exception {
+        Subscription s = findById(subscriptionId).orElseThrow(() -> new Exception("Subscription not found (ID " + subscriptionId + ")."));
+        SubscriptionPlan plan = findPlan(newPlanId).orElseThrow(() -> new Exception("Plan not found (ID " + newPlanId + ")."));
+        if (plan.getUnitPrice() * s.getQuantity() < s.getAmountPaid())
+            throw new Exception("New plan total would be below amount already paid (" + s.getAmountPaid() + ").");
+        s.setPlanId(newPlanId);
+        s.setTotalAmount(plan.getUnitPrice() * s.getQuantity());
+    }
+
     public void updateStatus(int subscriptionId, SubscriptionStatus status) throws Exception {
         Subscription s = findById(subscriptionId).orElseThrow(() -> new Exception("Subscription not found (ID " + subscriptionId + ")."));
         if (status == null) throw new Exception("Status cannot be empty.");

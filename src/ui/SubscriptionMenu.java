@@ -27,7 +27,7 @@ public class SubscriptionMenu {
             System.out.println("\n-- Subscription Management --");
             System.out.println("1. Manage Subscription Plans");
             System.out.println("2. Manage Customer Subscriptions");
-            System.out.println("0. Back to Main Menu");
+            System.out.println("3. Back to Main Menu");
 
             String c = InputHelper.readText(sc, "Choose: ");
             switch (c) {
@@ -37,7 +37,7 @@ public class SubscriptionMenu {
                 case "2":
                     showSubscriptionMenu();
                     break;
-                case "0":
+                case "3":
                     back = true;
                     break;
                 default:

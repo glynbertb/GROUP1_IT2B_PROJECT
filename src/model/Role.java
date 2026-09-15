@@ -2,6 +2,6 @@ package model;
 
 public enum Role {
     ADMIN,
-    STAFF,
-    DRIVER
+    DELIVERY_PERSONNEL,
+    CUSTOMER
 }

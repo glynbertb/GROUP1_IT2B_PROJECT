@@ -28,6 +28,32 @@ public class ContainerService {
         return c;
     }
 
+    public Container updateContainer(int containerId, String newCode,
+            ContainerCondition condition, ContainerStatus status) throws Exception {
+        Container c = findById(containerId)
+                .orElseThrow(() -> new Exception("Container not found (ID " + containerId + ")."));
+        if (newCode == null || !newCode.trim().toUpperCase().matches("CNT-\\d{4}"))
+            throw new Exception("Container code must match CNT-0000 format (e.g. CNT-0006).");
+        String norm = newCode.trim().toUpperCase();
+        for (Container other : ctx.containers) {
+            if (other.getId() != containerId && other.getContainerCode().equalsIgnoreCase(norm))
+                throw new Exception("Container code already exists (" + norm + ").");
+        }
+        if (condition == null) throw new Exception("Condition cannot be empty.");
+        if (status == null) throw new Exception("Status cannot be empty.");
+        c.setContainerCode(norm);
+        c.setCondition(condition);
+        c.setStatus(status);
+        if (condition == ContainerCondition.MAJOR_DAMAGE || condition == ContainerCondition.UNUSABLE) {
+            c.setStatus(ContainerStatus.DAMAGED);
+        }
+        if (c.getStatus() == ContainerStatus.AVAILABLE) {
+            c.setAssignedCustomerId(null);
+            c.setAssignedSubscriptionId(null);
+        }
+        return c;
+    }
+
     public void deleteContainer(int containerId) throws Exception {
         Container c = findById(containerId).orElseThrow(() -> new Exception("Container not found (ID " + containerId + ")."));
         if (c.getStatus() == ContainerStatus.ASSIGNED || c.getStatus() == ContainerStatus.IN_TRANSIT)

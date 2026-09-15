@@ -28,40 +28,142 @@ public class DeliveryMenu {
         boolean back = false;
         while (!back) {
             System.out.println("\n-- Delivery Management --");
-            System.out.println("1. Schedule delivery (Create)");
-            System.out.println("2. List all deliveries (Read)");
-            System.out.println("3. View delivery by ID (Read)");
-            System.out.println("4. Assign driver to delivery (Update)");
-            System.out.println("5. Unassign driver (Update)");
-            System.out.println("6. Assign / prepare container for delivery (Update)");
-            System.out.println("7. Remove container from delivery (Update)");
-            System.out.println("8. Reschedule delivery (Update)");
-            System.out.println("9. Update delivery status (Update)");
-            System.out.println("10. Cancel delivery (Update)");
-            System.out.println("11. Delete delivery (Delete)");
-            System.out.println("0. Back");
+            System.out.println("1. Schedule & Operations Management");
+            System.out.println("2. Driver Assignments");
+            System.out.println("3. Container Assignments");
+            System.out.println("0. Back to Main Menu");
+
+            String c = InputHelper.readText(sc, "Choose: ");
+            switch (c) {
+                case "1":
+                    showScheduleMenu();
+                    break;
+                case "2":
+                    showDriverAssignmentMenu();
+                    break;
+                case "3":
+                    showContainerAssignmentMenu();
+                    break;
+                case "0":
+                    back = true;
+                    break;
+                default:
+                    System.out.println("  ! Invalid option. Choose 0-3.");
+                    break;
+            }
+        }
+    }
+
+    // --- SUB-MENU 1: SCHEDULE & OPERATIONS MANAGEMENT ---
+    private void showScheduleMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n-- Schedule & Operations Management --");
+            System.out.println("1. Schedule delivery");
+            System.out.println("2. List all deliveries");
+            System.out.println("3. Reschedule delivery");
+            System.out.println("4. Update delivery status");
+            System.out.println("5. Cancel delivery");
+            System.out.println("6. Delete delivery");
+            System.out.println("7. Back");
+
             String c = InputHelper.readText(sc, "Choose: ");
             try {
                 switch (c) {
-                    case "1": schedule(); break;
-                    case "2": list(); break;
-                    case "3": view(); break;
-                    case "4": assignDriver(); break;
-                    case "5": unassignDriver(); break;
-                    case "6": assignContainer(); break;
-                    case "7": removeContainer(); break;
-                    case "8": reschedule(); break;
-                    case "9": updateStatus(); break;
-                    case "10": cancel(); break;
-                    case "11": delete(); break;
-                    case "0": back = true; break;
-                    default: System.out.println("  ! Invalid option. Choose 0-11.");
+                    case "1":
+                        schedule();
+                        break;
+                    case "2":
+                        list();
+                        break;
+                    case "3":
+                        reschedule();
+                        break;
+                    case "4":
+                        updateStatus();
+                        break;
+                    case "5":
+                        cancel();
+                        break;
+                    case "6":
+                        delete();
+                        break;
+                    case "7":
+                        back = true;
+                        break;
+                    default:
+                        System.out.println("  ! Invalid option. Choose 0-6.");
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println("ERROR: " + e.getMessage());
             }
         }
     }
+
+    // --- SUB-MENU 2: DELIVERY PERSONNEL ASSIGNMENTS ---
+    private void showDriverAssignmentMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n-- Driver Assignments --");
+            System.out.println("1. Assign driver to delivery");
+            System.out.println("2. Unassign driver");
+            System.out.println("0. Back");
+
+            String c = InputHelper.readText(sc, "Choose: ");
+            try {
+                switch (c) {
+                    case "1":
+                        assignDriver();
+                        break;
+                    case "2":
+                        unassignDriver();
+                        break;
+                    case "3":
+                        back = true;
+                        break;
+                    default:
+                        System.out.println("  ! Invalid option. Choose 0-2.");
+                        break;
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e.getMessage());
+            }
+        }
+    }
+
+    // --- SUB-MENU 3: CONTAINER ASSIGNMENTS ---
+    private void showContainerAssignmentMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n-- Container Assignments --");
+            System.out.println("1. Assign / prepare container for delivery");
+            System.out.println("2. Remove container from delivery");
+            System.out.println("3. Back");
+
+            String c = InputHelper.readText(sc, "Choose: ");
+            try {
+                switch (c) {
+                    case "1":
+                        assignContainer();
+                        break;
+                    case "2":
+                        removeContainer();
+                        break;
+                    case "3":
+                        back = true;
+                        break;
+                    default:
+                        System.out.println("  ! Invalid option. Choose 0-2.");
+                        break;
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e.getMessage());
+            }
+        }
+    }
+
+    // --- HELPER METHODS ---
 
     private void schedule() throws Exception {
         int subId = InputHelper.readId(sc, "Subscription ID: ");
@@ -74,13 +176,6 @@ public class DeliveryMenu {
 
     private void list() {
         printDeliveries(deliveryService.all());
-    }
-
-    private void view() {
-        int id = InputHelper.readId(sc, "Delivery ID: ");
-        deliveryService.findById(id).ifPresentOrElse(
-                d -> printDeliveries(java.util.List.of(d)),
-                () -> System.out.println("  ! Delivery not found (ID " + id + ")."));
     }
 
     private void assignDriver() throws Exception {

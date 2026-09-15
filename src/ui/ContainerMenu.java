@@ -24,36 +24,138 @@ public class ContainerMenu {
         boolean back = false;
         while (!back) {
             System.out.println("\n-- Container Management --");
-            System.out.println("1. Prepare new container (Create)");
-            System.out.println("2. List all containers (Read)");
-            System.out.println("3. Find container by code (Read)");
-            System.out.println("4. Record container assignment to customer (Update)");
-            System.out.println("5. Record delivered container (Update)");
-            System.out.println("6. Record returned container (Update)");
-            System.out.println("7. Check / update container condition (Update)");
-            System.out.println("8. Update container status (Update)");
-            System.out.println("9. Delete container (Delete)");
-            System.out.println("0. Back");
+            System.out.println("1. Container Inventory & CRUD");
+            System.out.println("2. Customer Allocation & Tracking");
+            System.out.println("3. Condition & Maintenance");
+            System.out.println("4. Back to Main Menu");
+
+            String c = InputHelper.readText(sc, "Choose: ");
+            switch (c) {
+                case "1":
+                    showInventoryMenu();
+                    break;
+                case "2":
+                    showTrackingMenu();
+                    break;
+                case "3":
+                    showMaintenanceMenu();
+                    break;
+                case "4":
+                    back = true;
+                    break;
+                default:
+                    System.out.println("  ! Invalid option. Choose 0-3.");
+                    break;
+            }
+        }
+    }
+
+    // --- SUB-MENU 1: INVENTORY & CRUD ---
+    private void showInventoryMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n-- Container Inventory & CRUD --");
+            System.out.println("1. Prepare new container");
+            System.out.println("2. List all containers");
+            System.out.println("3. Update container");
+            System.out.println("4. Delete container");
+            System.out.println("5. Back");
+
             String c = InputHelper.readText(sc, "Choose: ");
             try {
                 switch (c) {
-                    case "1": create(); break;
-                    case "2": list(); break;
-                    case "3": find(); break;
-                    case "4": assign(); break;
-                    case "5": delivered(); break;
-                    case "6": returned(); break;
-                    case "7": condition(); break;
-                    case "8": status(); break;
-                    case "9": delete(); break;
-                    case "0": back = true; break;
-                    default: System.out.println("  ! Invalid option. Choose 0-9.");
+                    case "1":
+                        create();
+                        break;
+                    case "2":
+                        list();
+                        break;
+                    case "3":
+                        update();
+                        break;
+                    case "4":
+                        delete();
+                        break;
+                    case "5":
+                        back = true;
+                        break;
+                    default:
+                        System.out.println("  ! Invalid option. Choose 0-4.");
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println("ERROR: " + e.getMessage());
             }
         }
     }
+
+    // --- SUB-MENU 2: ALLOCATION & TRACKING ---
+    private void showTrackingMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n-- Customer Allocation & Tracking --");
+            System.out.println("1. Record container assignment to customer");
+            System.out.println("2. Record delivered container");
+            System.out.println("3. Record returned container");
+            System.out.println("4. Back");
+
+            String c = InputHelper.readText(sc, "Choose: ");
+            try {
+                switch (c) {
+                    case "1":
+                        assign();
+                        break;
+                    case "2":
+                        delivered();
+                        break;
+                    case "3":
+                        returned();
+                        break;
+                    case "4":
+                        back = true;
+                        break;
+                    default:
+                        System.out.println("  ! Invalid option. Choose 0-3.");
+                        break;
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e.getMessage());
+            }
+        }
+    }
+
+    // --- SUB-MENU 3: CONDITION & MAINTENANCE ---
+    private void showMaintenanceMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n-- Condition & Maintenance --");
+            System.out.println("1. Check / update container condition");
+            System.out.println("2. Update container status");
+            System.out.println("3. Back");
+
+            String c = InputHelper.readText(sc, "Choose: ");
+            try {
+                switch (c) {
+                    case "1":
+                        condition();
+                        break;
+                    case "2":
+                        status();
+                        break;
+                    case "3":
+                        back = true;
+                        break;
+                    default:
+                        System.out.println("  ! Invalid option. Choose 0-2.");
+                        break;
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e.getMessage());
+            }
+        }
+    }
+
+    // --- HELPER METHODS ---
 
     private void create() throws Exception {
         String code = InputHelper.readText(sc, "Container code (format CNT-0000): ", 8, 8, false).toUpperCase();
@@ -66,11 +168,19 @@ public class ContainerMenu {
         printContainers(containerService.all());
     }
 
-    private void find() {
-        String code = InputHelper.readText(sc, "Container code (e.g. CNT-0001): ");
-        containerService.findByCode(code).ifPresentOrElse(
-                ct -> printContainers(java.util.List.of(ct)),
-                () -> System.out.println("  ! Container not found (" + code.toUpperCase() + ")."));
+    private void update() throws Exception {
+        int ctId = InputHelper.readId(sc, "Container ID to update: ");
+        Container existing = containerService.findById(ctId)
+                .orElseThrow(() -> new Exception("Container not found (ID " + ctId + ")."));
+        printContainers(java.util.List.of(existing));
+        String code = InputHelper.readText(sc, "New code (format CNT-0000) [" + existing.getContainerCode() + "]: ", 8, 8, false).toUpperCase();
+        System.out.println("Conditions: GOOD, MINOR_DAMAGE, MAJOR_DAMAGE, UNUSABLE");
+        ContainerCondition cond = InputHelper.readEnum(sc, "New condition [" + existing.getCondition() + "]: ", ContainerCondition.class);
+        System.out.println("Statuses: AVAILABLE, ASSIGNED, IN_TRANSIT, DELIVERED, RETURNED, DAMAGED, RETIRED");
+        ContainerStatus st = InputHelper.readEnum(sc, "New status [" + existing.getStatus() + "]: ", ContainerStatus.class);
+        Container updated = containerService.updateContainer(ctId, code, cond, st);
+        System.out.println("Updated successfully.");
+        printContainers(java.util.List.of(updated));
     }
 
     private void printContainers(List<Container> list) {

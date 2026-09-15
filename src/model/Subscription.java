@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Subscription {
     private final int id;
     private final int customerId;
-    private final int planId;
+    private int planId;
     private int quantity;
     private final LocalDate startDate;
     private SubscriptionStatus status;
@@ -26,6 +26,7 @@ public class Subscription {
     public int getId() { return id; }
     public int getCustomerId() { return customerId; }
     public int getPlanId() { return planId; }
+    public void setPlanId(int planId) { this.planId = planId; }
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
     public LocalDate getStartDate() { return startDate; }

@@ -2,7 +2,7 @@ package model;
 
 public class Container {
     private final int id;
-    private final String containerCode;
+    private String containerCode;
     private ContainerStatus status;
     private ContainerCondition condition;
     private Integer assignedCustomerId;
@@ -19,6 +19,7 @@ public class Container {
 
     public int getId() { return id; }
     public String getContainerCode() { return containerCode; }
+    public void setContainerCode(String containerCode) { this.containerCode = containerCode; }
     public ContainerStatus getStatus() { return status; }
     public void setStatus(ContainerStatus status) { this.status = status; }
     public ContainerCondition getCondition() { return condition; }
