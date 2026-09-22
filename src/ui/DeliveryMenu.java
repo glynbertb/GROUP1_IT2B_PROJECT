@@ -2,6 +2,7 @@ package ui;
 
 import model.*;
 import service.*;
+import util.DeliveryReceipt;
 import util.InputHelper;
 import util.TablePrinter;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DeliveryMenu {
+    private final AppContext ctx;
     private final DeliveryService deliveryService;
     private final SubscriptionService subscriptionService;
     private final DriverService driverService;
@@ -17,6 +19,7 @@ public class DeliveryMenu {
     private final Scanner sc;
 
     public DeliveryMenu(AppContext ctx, Scanner sc) {
+        this.ctx = ctx;
         this.subscriptionService = new SubscriptionService(ctx);
         this.driverService = new DriverService(ctx);
         this.containerService = new ContainerService(ctx);
@@ -65,7 +68,8 @@ public class DeliveryMenu {
             System.out.println("4. Update delivery status");
             System.out.println("5. Cancel delivery");
             System.out.println("6. Delete delivery");
-            System.out.println("7. Back");
+            System.out.println("7. Print delivery receipt (order summary)");
+            System.out.println("8. Back");
 
             String c = InputHelper.readText(sc, "Choose: ");
             try {
@@ -89,10 +93,13 @@ public class DeliveryMenu {
                         delete();
                         break;
                     case "7":
+                        printReceipt();
+                        break;
+                    case "8":
                         back = true;
                         break;
                     default:
-                        System.out.println("  ! Invalid option. Choose 0-6.");
+                        System.out.println("  ! Invalid option. Choose 1-8.");
                         break;
                 }
             } catch (Exception e) {
@@ -176,6 +183,11 @@ public class DeliveryMenu {
 
     private void list() {
         printDeliveries(deliveryService.all());
+    }
+
+    private void printReceipt() throws Exception {
+        int delId = InputHelper.readId(sc, "Delivery ID: ");
+        DeliveryReceipt.print(ctx, delId);
     }
 
     private void assignDriver() throws Exception {

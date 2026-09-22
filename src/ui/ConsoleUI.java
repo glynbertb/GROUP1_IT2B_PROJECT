@@ -7,6 +7,7 @@ import service.AppContext;
 import service.AuthService;
 import service.CustomerService;
 import service.UserService;
+import util.DeliveryReceipt;
 import util.InputHelper;
 import java.util.Scanner;
 
@@ -98,6 +99,10 @@ public class ConsoleUI {
                         if (ctx.currentUser.getRole() == Role.ADMIN) userMenu.show();
                         else System.out.println("  ! User Management is restricted to administrators.");
                         break;
+                    case "9":
+                        int delId = InputHelper.readId(sc, "Delivery ID: ");
+                        DeliveryReceipt.print(ctx, delId);
+                        break;
                     case "0":
                         System.out.println("Logging out. Goodbye, " + ctx.currentUser.getFullName() + "!");
                         authService.logout();
@@ -178,6 +183,7 @@ public class ConsoleUI {
         if (ctx.currentUser.getRole() == Role.ADMIN) {
             System.out.println("8. User Management (Admin)");
         }
+        System.out.println("9. Print delivery receipt");
         System.out.println("0. Logout");
         System.out.println("--------------------------------------------------");
     }
