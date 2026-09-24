@@ -81,7 +81,7 @@ public class DeliveryReceiptCheck {
     private static void mustContain(String haystack, String needle, String problem) {
         if (!haystack.contains(needle)) {
             System.out.println("FAIL: " + problem + " (expected <" + needle + ">). Receipt was:");
-            System.out.println(haystack);
+            System.out.println(haysta/*ck);
             System.exit(1);
         }
     }

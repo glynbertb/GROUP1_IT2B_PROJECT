@@ -71,5 +71,8 @@ public class ReportService {
             sumRows.add(new String[]{String.valueOf(e.getKey()), String.valueOf(e.getValue())});
         }
         TablePrinter.print("Containers by Status", sumHeaders, sumRows);
+
+
+
     }
 }
